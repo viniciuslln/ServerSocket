@@ -27,7 +27,10 @@ public:
     Server_Manager(int argc, char *argv[]);
     Server_Manager(const Server_Manager& orig);
     virtual ~Server_Manager();
+    
 private:
+    
+    int num;
     int server;
     int port_number;
     int buf_size;
