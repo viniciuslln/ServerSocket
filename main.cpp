@@ -23,7 +23,8 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
-    Server_Manager * serv = new Server_Manager();
+    Server_Manager *serv = new Server_Manager();
+    serv->conectar();
     
     return 0;
 }

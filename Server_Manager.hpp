@@ -14,33 +14,40 @@
 #ifndef SERVER_MANAGER_HPP
 #define SERVER_MANAGER_HPP
 
-#include <sys/types.h>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h> 
 #include <sys/socket.h>
+#include <netinet/in.h>
 #include <list>
 #include "Cliente.hpp"
 
+#define buf_size 256
 
 class Server_Manager {
-    
 public:
     Server_Manager();
     Server_Manager(int argc, char *argv[]);
     Server_Manager(const Server_Manager& orig);
     virtual ~Server_Manager();
-    
+
+    void conectar();
+
 private:
-    
+
     int num;
     int server;
     int port_number;
-    int buf_size;
     char buffer[buf_size];
-    std::list< *Cliente > clients;
-    
+    std::list<Cliente*> clients;
+
     struct sockaddr_in server_addr;
     socklen_t server_size;
-    
-    
+
+
 
 };
 

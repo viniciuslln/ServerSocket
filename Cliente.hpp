@@ -14,6 +14,7 @@
 #ifndef CLIENTE_HPP
 #define CLIENTE_HPP
 #include <sys/socket.h>
+#include <netinet/in.h>
 
 class Cliente {
 private:
@@ -27,13 +28,13 @@ public:
     virtual ~Cliente();
     
     int get_Client() {return client;}
-    void set_Client(int c){ client = c }
+    void set_Client(int c){ client = c ;}
     
-    struct sockaddr_in get_Client_Addr() {return client_addr;}
-    void set_Client(struct sockaddr_in c){ client_addr = c }
+    sockaddr_in* get_Client_Addr() {return &client_addr;}
+    void set_Client(struct sockaddr_in c){ client_addr = c ;}
 
-    int get_Client_Size() {return client_size;}
-    void set_Client(socklen_t c){ client_size = c }
+    socklen_t* get_Client_Size() {return &client_size;}
+    void set_Client(socklen_t c){ client_size = c; }
 
 };
 
