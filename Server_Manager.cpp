@@ -12,7 +12,8 @@
  */
 
 #include "Server_Manager.hpp"
-
+#define handle_error(msg) \
+           do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
 using namespace std;
 
@@ -26,6 +27,14 @@ void error(const char *msg)
 Server_Manager::Server_Manager() 
 {
     port_number = 6969;
+    
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(port_number);
+    
+    server_size = sizeof(struct sockaddr_in);
+
+    
 }
 
 Server_Manager::Server_Manager(const Server_Manager& orig) {
@@ -53,13 +62,10 @@ void Server_Manager::conectar()
 
         cout << "Server socket criado" << endl;
         
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_addr.s_addr = htons(INADDR_ANY);
-        server_addr.sin_port = htons(port_number);
-        
         //binding
         if(bind(server, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
         {
+            handle_error("bind");
             cout << "Erro bind socket" << endl;
             exit(1);
         }
@@ -68,15 +74,35 @@ void Server_Manager::conectar()
         
         cout << "Procurando Cliente" << endl;
         
-        listen(client->get_Client(), 0);
-
-        client->set_Client( accept( server, (struct sockaddr*) client->get_Client_Addr(), client->get_Client_Size() ) );
+//        listen(client->get_Client(), 0);
+//        
+//        client->set_Client( accept( server, (struct sockaddr*) client->get_Client_Addr(), client->get_Client_Size() ) );
+//        if (client->get_Client() < 0)
+//        {
+//            cout << "Erro ao aceitar" << endl;
+//            exit(1);
+//        }
         
-        if (client->get_Client() < 0)
+        int cli;
+        struct sockaddr_in cli_addr;
+        socklen_t cli_size =  sizeof(struct sockaddr_in);
+
+        
+        if(listen(server,0) == -1)
+            handle_error("listen");
+        
+        cli = accept(server, (struct sockaddr *) &cli_addr, &cli_size);
+        
+        if (cli < 0)
         {
+            handle_error("accept");
             cout << "Erro ao aceitar" << endl;
             exit(1);
         }
+        
+        
+        
+        
         
         strcpy(buffer, "server conncted");
         
