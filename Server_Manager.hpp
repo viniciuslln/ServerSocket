@@ -42,7 +42,7 @@ private:
     int server;
     int port_number;
     char buffer[buf_size];
-    std::list<Cliente*> clients;
+    std::list<Cliente*>* clients;
 
     struct sockaddr_in server_addr;
     socklen_t server_size;

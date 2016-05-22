@@ -12,6 +12,8 @@
  */
 
 #include "Server_Manager.hpp"
+#include "ClientHandler.hpp"
+
 #define handle_error(msg) \
            do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
@@ -26,14 +28,15 @@ void error(const char *msg)
 
 Server_Manager::Server_Manager() 
 {
+    clients = new std::list<Cliente*>();
+    
     port_number = 6969;
     
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(port_number);
-    
-    server_size = sizeof(struct sockaddr_in);
+    server_size = sizeof(server_addr);
 
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr =  INADDR_ANY;
+    server_addr.sin_port = htons(port_number);
     
 }
 
@@ -48,9 +51,8 @@ void Server_Manager::conectar()
 {
     //while(1){
         
-        Cliente *client = new Cliente();
         
-        int server = socket(AF_INET, SOCK_STREAM, 0);
+        int server = socket(AF_INET, SOCK_STREAM, 0);//IPPROTO_TCP);
         
         if (server < 0)
         {
@@ -58,12 +60,10 @@ void Server_Manager::conectar()
             exit(1);
         }
         
-        memset(&server_addr, 0, sizeof(struct sockaddr_in));
-
         cout << "Server socket criado" << endl;
         
         //binding
-        if(bind(server, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0)
+        if(bind(server, (struct sockaddr*)&server_addr, server_size) < 0)
         {
             handle_error("bind");
             cout << "Erro bind socket" << endl;
@@ -72,86 +72,47 @@ void Server_Manager::conectar()
         
         server_size = sizeof(server_addr);
         
-        cout << "Procurando Cliente" << endl;
+        cout << "Procurando Cliente, port number: " << port_number << endl;
         
-//        listen(client->get_Client(), 0);
-//        
-//        client->set_Client( accept( server, (struct sockaddr*) client->get_Client_Addr(), client->get_Client_Size() ) );
-//        if (client->get_Client() < 0)
-//        {
-//            cout << "Erro ao aceitar" << endl;
-//            exit(1);
-//        }
-        
-        int cli;
-        struct sockaddr_in cli_addr;
-        socklen_t cli_size =  sizeof(struct sockaddr_in);
-
         
         if(listen(server,0) == -1)
             handle_error("listen");
         
-        cli = accept(server, (struct sockaddr *) &cli_addr, &cli_size);
         
-        if (cli < 0)
+        ClientHandler* ch = new ClientHandler(clients);
+
+        
+        while(1)
         {
-            handle_error("accept");
-            cout << "Erro ao aceitar" << endl;
-            exit(1);
+            int cli;
+            struct sockaddr_in cli_addr;
+            socklen_t cli_size =  sizeof(struct sockaddr_in);
+
+            cout << "Aceitando Cliente " << port_number << endl;
+
+            cli = accept(server, (struct sockaddr *) &cli_addr, &cli_size);
+
+            if (cli < 0)
+            {
+                handle_error("accept");
+                cout << "Erro ao aceitar" << endl;
+                exit(1);
+            }
+
+            Cliente *client = new Cliente();
+            client->set_Client(cli);
+            client->set_Client(cli_addr);
+            client->set_Client(cli_size);
+                    
+            clients->push_back( client );
+
+            
         }
+                
         
         
         
         
-        
-        strcpy(buffer, "server conncted");
-        
-        
-        //------------------------------------------
-        /*
-           int sfd, cfd;
-           struct sockaddr_un my_addr, peer_addr;
-           socklen_t peer_addr_size;
-
-           sfd = socket(AF_UNIX, SOCK_STREAM, 0);
-           if (sfd == -1)
-               handle_error(”socket”);
-
-           memset(&my_addr, 0, sizeof(struct sockaddr_un));
-           
-            //  Clear structure 
-           my_addr.sun_family = AF_UNIX;
-           strncpy(my_addr.sun_path, MY_SOCK_PATH,
-                   sizeof(my_addr.sun_path) - 1);
-
-           if (bind(sfd, (struct sockaddr *) &my_addr,
-                   sizeof(struct sockaddr_un)) == -1)
-               handle_error(”bind”);
-
-           if (listen(sfd, LISTEN_BACKLOG) == -1)
-               handle_error(”listen”);
-
-           /// Now we can accept incoming connections one
-           //   at a time using accept(2) 
-
-           peer_addr_size = sizeof(struct sockaddr_un);
-           cfd = accept(sfd, (struct sockaddr *) &peer_addr,
-                        &peer_addr_size);
-           if (cfd == -1)
-               handle_error(”accept”);
-         
-        */
-        
-           /* Code to deal with incoming connection(s)... */
-
-           /* When no longer required, the socket pathname,
-           MY_SOCK_PATH
-              should be deleted using unlink(2) or remove(3) */
-        
-        
-       //----------------------------------------- 
-        
-        //clients.push_back( client );
     //}
 }
 
