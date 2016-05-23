@@ -17,6 +17,8 @@
 #include "Cliente.hpp"
 #include <thread>
 #include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 #include <cstring>
 #include <iostream>
 #include <unistd.h>
@@ -24,9 +26,11 @@
 
 
 
+
 class ClientHandler {
 private:
     std::list <Cliente*>*  clients_list;
+    const char* getDate();
 public:
     ClientHandler();
     ClientHandler( std::list <Cliente*>* cli );

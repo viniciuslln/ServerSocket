@@ -7,9 +7,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/vinih/NetBeansProjects/Server/main.cpp</file>
-            <file>file:/home/vinih/NetBeansProjects/Server/Cliente.hpp</file>
+            <file>file:/home/vinih/NetBeansProjects/Server/ClientHandler.cpp</file>
             <file>file:/home/vinih/NetBeansProjects/Server/Server_Manager.cpp</file>
+            <file>file:/home/vinih/NetBeansProjects/Server/ClientHandler.hpp</file>
             <file>file:/home/vinih/NetBeansProjects/Server/Server_Manager.hpp</file>
         </group>
     </open-files>

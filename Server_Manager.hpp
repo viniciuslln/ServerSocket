@@ -25,7 +25,7 @@
 #include <list>
 #include "Cliente.hpp"
 
-#define buf_size 256
+#define buf_size 1024
 
 class Server_Manager {
 public:
