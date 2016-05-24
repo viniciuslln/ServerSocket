@@ -15,6 +15,16 @@
 
 Cliente::Cliente() {
 }
+Cliente::Cliente(int cli, sockaddr_in soc_add, socklen_t soc_len) {
+    this->client = cli;
+    this->clientAddr = soc_add;
+    this->clientSize = soc_len;
+    
+    this->logIn = time(0);
+    this->status = true;
+        
+    
+}
 
 Cliente::Cliente(const Cliente& orig) {
 }

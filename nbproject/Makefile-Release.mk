@@ -37,7 +37,9 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/ClientHandler.o \
 	${OBJECTDIR}/Cliente.o \
+	${OBJECTDIR}/CommandsHandler.o \
 	${OBJECTDIR}/Server_Manager.o \
+	${OBJECTDIR}/Utils.o \
 	${OBJECTDIR}/main.o
 
 
@@ -75,10 +77,20 @@ ${OBJECTDIR}/Cliente.o: Cliente.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Cliente.o Cliente.cpp
 
+${OBJECTDIR}/CommandsHandler.o: CommandsHandler.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CommandsHandler.o CommandsHandler.cpp
+
 ${OBJECTDIR}/Server_Manager.o: Server_Manager.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Server_Manager.o Server_Manager.cpp
+
+${OBJECTDIR}/Utils.o: Utils.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Utils.o Utils.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

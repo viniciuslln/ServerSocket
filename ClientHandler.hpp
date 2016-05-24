@@ -15,6 +15,7 @@
 #define CLIENTHANDLER_HPP
 
 #include "Cliente.hpp"
+#include "Commands.hpp"
 #include <thread>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -23,20 +24,22 @@
 #include <iostream>
 #include <unistd.h>
 #include <list>
-
-
+#include <ctime>
+#include "Utils.h"
 
 
 class ClientHandler {
 private:
+    Cliente* client;
     std::list <Cliente*>*  clients_list;
-    const char* getDate();
+    void threadSendRecieve();
 public:
     ClientHandler();
+    ClientHandler(Cliente*);
     ClientHandler( std::list <Cliente*>* cli );
     ClientHandler(const ClientHandler& orig);
     virtual ~ClientHandler();
-    void send( std::list <Cliente*>* clients );
+    void sendLoop( std::list <Cliente*>* clients );
 
 };
 

@@ -12,51 +12,22 @@
  */
 
 #include "ClientHandler.hpp"
-#include <cstring>
+#include "CommandsHandler.h"
+
+
 
 #define buf_size 1024
 #define handle_error(msg) \
            do { perror(msg); /*exit(EXIT_FAILURE);*/ } while (0)
 
-void ClientHandler::send( std::list <Cliente*>* clients )
-{
-    char buffer_out[buf_size];
-    char buffer_in[buf_size];
-
-    while(1)
-    {
-        std::cout<<"Send to : " << clients->size() << " Clients" << std::endl;
-
-        for( auto current : *clients)
-        {
-            std::cout<<"Sending to : " << current->get_Client() << " ip: "<< inet_ntoa(current->get_Client_Addr()->sin_addr) << std::endl;
-
-            
-            strcpy(buffer_out, "=> Server connected...\n");
-            strcat(buffer_out, getDate());
-
-                if (write(current->get_Client(),buffer_out,buf_size) < 0) 
-                {
-                    handle_error("write");
-                    break;
-                }           
-
-                if ( recv(current->get_Client(), buffer_in, buf_size, 0) < 0) 
-                {
-                    handle_error("recv");
-                    break;
-                }
-
-                printf("%s\n",buffer_in);
-        }
-            std::this_thread::sleep_for (std::chrono::seconds(5));
-    }
-    
-
-}
-
 ClientHandler::ClientHandler()
 {
+}
+
+ClientHandler::ClientHandler(Cliente* cli)
+{
+    this->client = cli;
+    std::thread (&ClientHandler::threadSendRecieve, this ).detach();
 }
 
 ClientHandler::ClientHandler(std::list <Cliente*>* cli)
@@ -64,7 +35,7 @@ ClientHandler::ClientHandler(std::list <Cliente*>* cli)
     clients_list = cli;
     try
     {
-        std::thread (&ClientHandler::send, this, clients_list ).detach();
+        std::thread (&ClientHandler::sendLoop, this, clients_list ).detach();
     }
     catch(const std::exception &ex)
     {
@@ -78,13 +49,72 @@ ClientHandler::ClientHandler(const ClientHandler& orig)
 
 ClientHandler::~ClientHandler()
 {
+    delete( this->client );
 }
 
-const char* ClientHandler::getDate()
+void ClientHandler::sendLoop( std::list <Cliente*>* clients )
 {
-    time_t _tm =time(NULL );
+    char buffer_out[buf_size];
+    char buffer_in[buf_size];
 
-    struct tm * curtime = localtime ( &_tm );
-    
-    return asctime(curtime);
+    while(1)
+    {
+        std::cout<<"Send to : " << clients->size() << " Clients" << std::endl;
+
+        for( auto current : *clients)
+        {
+            std::cout<<"Sending to : " << current->getClient() << " ip: "<< inet_ntoa(current->getClientAddr()->sin_addr) << std::endl;
+     
+            strcpy(buffer_out, "=> Server connected...\n");
+            strcat(buffer_out, Utils::getDate() );
+
+                if (write(current->getClient(),buffer_out,buf_size) < 0) 
+                {
+                    handle_error("write");
+                    break;
+                }           
+
+                if ( recv(current->getClient(), buffer_in, buf_size, 0) < 0) 
+                {
+                    handle_error("recv");
+                    break;
+                }
+
+                printf("%s\n",buffer_in);
+        }
+            std::this_thread::sleep_for (std::chrono::seconds(5));
+    }
 }
+
+void ClientHandler::threadSendRecieve()
+{
+    bool finalize = false;
+    char bufferCommand[COMMANDS_BUFFER_SIZE];
+    char bufferMessage[MESSAGE_BUFFER_SIZE];
+
+    do{
+        
+        recv(client->getClient(), bufferCommand, COMMANDS_BUFFER_SIZE,0);
+        
+        Commands command = CommandsHandler::bufferToCommand(bufferCommand);
+        
+        if(command == Commands::EXIT)
+        {
+            finalize = true;
+            close(client->getClient());
+            client->setClientStatus(false);
+            client->setClientLogout(time(0));
+        }
+        else
+        {
+            strcpy(bufferMessage, CommandsHandler::getCommandMessage(command).c_str() );
+            send(client->getClient(), bufferMessage, MESSAGE_BUFFER_SIZE, 0);
+        }
+        
+        
+    }while(!finalize);
+    
+}
+
+
+

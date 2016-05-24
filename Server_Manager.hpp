@@ -15,6 +15,7 @@
 #define SERVER_MANAGER_HPP
 
 #include <iostream>
+#include <cstdlib>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,7 +24,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <list>
+#include <chrono>
+#include <ctime>
+#include <thread>
 #include "Cliente.hpp"
+#include "ClientHandler.hpp"
 
 #define buf_size 1024
 
@@ -31,6 +36,7 @@ class Server_Manager {
 public:
     Server_Manager();
     Server_Manager(int argc, char *argv[]);
+    Server_Manager(char * port);
     Server_Manager(const Server_Manager& orig);
     virtual ~Server_Manager();
 
@@ -43,6 +49,8 @@ private:
     int port_number;
     char buffer[buf_size];
     std::list<Cliente*>* clients;
+    std::list<ClientHandler*>* clientsHandlerList;
+   // std::list<std::thread>* threads_list;
 
     struct sockaddr_in server_addr;
     socklen_t server_size;
