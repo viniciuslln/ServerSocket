@@ -16,7 +16,7 @@
 
 
 #define handle_error(msg) \
-           do { perror(msg); exit(EXIT_FAILURE); } while (0)
+           do { perror(msg); /*exit(EXIT_FAILURE);*/ } while (0)
 
 using namespace std;
 
@@ -67,6 +67,7 @@ Server_Manager::~Server_Manager()
 void Server_Manager::conectar()
 {
 
+    //socke server
     int server = socket(AF_INET, SOCK_STREAM, 0); //IPPROTO_TCP);
 
     if ( server < 0 )
@@ -86,9 +87,10 @@ void Server_Manager::conectar()
     }
 
 
-    cout << "Procurando Cliente, port number: " << port_number << endl;
+    cout << "Listen Clients, port number: " << port_number << endl;
 
 
+    //listen
     if ( listen(server, 0) == -1 )
         handle_error("listen");
 
@@ -102,10 +104,8 @@ void Server_Manager::conectar()
         struct sockaddr_in cli_addr;
         socklen_t cli_size = sizeof (struct sockaddr_in);
 
-        cout << "Aceitando Cliente " << port_number << endl;
-
+        //accept client
         cli = accept(server, ( struct sockaddr * ) &cli_addr, &cli_size);
-
         if ( cli < 0 )
         {
             handle_error("accept");
@@ -115,8 +115,12 @@ void Server_Manager::conectar()
 
         Cliente *client = new Cliente(cli, cli_addr, cli_size);
         
+        cout << "Connected Client: " << client->getClient() << " IP: " << client->get_ClientIp() << endl;
+        
         clientsHandlerList->push_back(new ClientHandler(client) );
         clients->push_back(client);
+        
+
 
 
     }

@@ -12,6 +12,7 @@
  */
 
 #include "CommandsHandler.h"
+#include "Utils.h"
 
 Commands CommandsHandler::bufferToCommand(char ch[])
 {
@@ -27,16 +28,20 @@ Commands CommandsHandler::bufferToCommand(char ch[])
 std::string CommandsHandler::getCommandMessage(Commands cmm)
 {
 
+    std::string  resposta; 
     switch ( cmm )
     {
         case Commands::HELP:
+                        resposta = std::string(Utils::getDate());
             break;
         case Commands::SYSTEM_HOUR:
+            resposta = std::string(Utils::getDate());
             break;
         default:
+                        resposta = std::string(Utils::getDate());
             break;
     }
-    return "teste";
+    return resposta;
 }
 
 

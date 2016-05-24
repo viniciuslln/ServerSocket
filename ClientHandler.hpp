@@ -33,6 +33,7 @@ private:
     Cliente* client;
     std::list <Cliente*>*  clients_list;
     void threadSendRecieve();
+    void closeConnection();
 public:
     ClientHandler();
     ClientHandler(Cliente*);
