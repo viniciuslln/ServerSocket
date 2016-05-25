@@ -113,9 +113,9 @@ void Server_Manager::conectar()
             exit(1);
         }
 
-        Cliente *client = new Cliente(cli, cli_addr, cli_size);
+        Cliente *client = new Cliente(cli, cli_addr, cli_size, server_addr );
         
-        cout << "Connected Client: " << client->getClient() << " IP: " << client->get_ClientIp() << endl;
+        cout << "Connected Client: " << client->getClient() << " IP: " << client->getClientIp() << endl;
         
         clientsHandlerList->push_back(new ClientHandler(client) );
         clients->push_back(client);

@@ -65,12 +65,12 @@ void ClientHandler::threadSendRecieve()
             handle_error("recv");
         else if ( r == 0 )
         {
-            std::cerr << "O bytes recieved, probably desconected" << std::endl;
+            std::cerr << "Client: "<< client->getClient() << " ip: "<< client->getClientIp() <<" O bytes recieved, probably desconected" << std::endl;
             finalize = true;
         }
         else
         {
-            std::cout << bufferCommand << std::endl;
+            std::cout<< "Recieve from Client: "<< client->getClient() << " ip: "<< client->getClientIp() << bufferCommand << std::endl;
             Commands command = CommandsHandler::bufferToCommand(bufferCommand);
             bzero(bufferCommand, COMMANDS_BUFFER_SIZE);
 
@@ -79,12 +79,12 @@ void ClientHandler::threadSendRecieve()
                  finalize = true;   
             } else
             {
-                strcpy(bufferMessage, CommandsHandler::getCommandMessage(command).c_str());
+                strcpy(bufferMessage, CommandsHandler::getCommandMessage(command, this->client).c_str());
                 
                 if ( send(client->getClient(), bufferMessage, MESSAGE_BUFFER_SIZE, 0) < 0 )
                     handle_error("send");
                 
-                std::cout<< "sended request" << std::endl;
+                std::cout<< "Sended request to Client: "<< client->getClient() << " ip: "<< client->getClientIp() << std::endl;
                 bzero(bufferMessage, MESSAGE_BUFFER_SIZE);
 
             }
@@ -117,7 +117,7 @@ void ClientHandler::sendLoop(std::list <Cliente*>* clients)
             std::cout << "Sending to : " << current->getClient() << " ip: " << inet_ntoa(current->getClientAddr()->sin_addr) << std::endl;
 
             strcpy(buffer_out, "=> Server connected...\n");
-            strcat(buffer_out, Utils::getDate());
+           /// strcat(buffer_out, Utils::getDate());
 
             if ( write(current->getClient(), buffer_out, buf_size) < 0 )
             {

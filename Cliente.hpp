@@ -23,6 +23,7 @@ class Cliente {
 private:
     int client;
     struct sockaddr_in clientAddr;
+    struct sockaddr_in serverAddr;
     socklen_t clientSize;
     char* ip;
     bool status;
@@ -31,20 +32,21 @@ private:
     
 public:
     Cliente();
-    Cliente(int, sockaddr_in, socklen_t);
+    Cliente(int, sockaddr_in, socklen_t, sockaddr_in);
     Cliente(const Cliente& orig);
     virtual ~Cliente();
     
     int getClient() {return client;}
-    void set_Client(int c){ client = c ;}
+    void setClient(int c){ client = c ;}
     
     sockaddr_in* getClientAddr() {return &clientAddr;}
-    void set_ClientAddres(struct sockaddr_in c){ clientAddr = c ;}
+    void setClientAddres(struct sockaddr_in c){ clientAddr = c ;}
 
     socklen_t* getClientSize() {return &clientSize;}
-    void set_ClientAdressSize(socklen_t c){ clientSize = c; }
+    void setClientAdressSize(socklen_t c){ clientSize = c; }
 
-    char* get_ClientIp() { return inet_ntoa(clientAddr.sin_addr);}
+    char* getClientIp() { return inet_ntoa(clientAddr.sin_addr);}
+    char* getServerIp() { return inet_ntoa(serverAddr.sin_addr);}
     
     bool getClientStatus(){return status;}
     void setClientStatus(bool s){ status = s; }
@@ -52,7 +54,7 @@ public:
     time_t getClientLogin(){return logIn;}
     void setClientLogin(time_t s){ logIn = s; }
   
-    time_t   getClientSLogout(){return logOut;}
+    time_t getClientSLogout(){return logOut;}
     void setClientLogout(time_t s){ logOut = s; }
     
 };
