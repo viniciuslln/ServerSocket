@@ -8,7 +8,7 @@
       <itemPath>Cliente.hpp</itemPath>
       <itemPath>Commands.hpp</itemPath>
       <itemPath>CommandsHandler.h</itemPath>
-      <itemPath>Server_Manager.hpp</itemPath>
+      <itemPath>ServerManager.hpp</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -20,7 +20,7 @@
       <itemPath>ClientHandler.cpp</itemPath>
       <itemPath>Cliente.cpp</itemPath>
       <itemPath>CommandsHandler.cpp</itemPath>
-      <itemPath>Server_Manager.cpp</itemPath>
+      <itemPath>ServerManager.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -67,9 +67,9 @@
       </item>
       <item path="CommandsHandler.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Server_Manager.cpp" ex="false" tool="1" flavor2="0">
+      <item path="ServerManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Server_Manager.hpp" ex="false" tool="3" flavor2="0">
+      <item path="ServerManager.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -109,9 +109,9 @@
       </item>
       <item path="CommandsHandler.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Server_Manager.cpp" ex="false" tool="1" flavor2="0">
+      <item path="ServerManager.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="Server_Manager.hpp" ex="false" tool="3" flavor2="0">
+      <item path="ServerManager.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-#include "Server_Manager.hpp"
+#include "ServerManager.hpp"
 
 
 /* 
@@ -22,15 +22,23 @@ using namespace std;
  * 
  */
 int main(int argc, char** argv) {
-
-    Server_Manager *serv;
-//    if (argc == 0)
-//        serv = new Server_Manager();
-//    else
-//        serv = new Server_Manager(argv[0]);
     
-     serv = new Server_Manager();
+    /**
+     * instanciando objeto para ServerManager
+     */
+    ServerManager *serv;
 
+    /*
+     *Recuperando porta de conexão dos args 
+     */
+    if (argc <= 1)
+        serv = new ServerManager();
+    else
+        serv = new ServerManager(argv[2]);
+    
+    /**
+     * Inicia servidor
+     */
     serv->conectar();
     
     return 0;

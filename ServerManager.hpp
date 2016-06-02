@@ -32,13 +32,13 @@
 
 #define buf_size 1024
 
-class Server_Manager {
+class ServerManager {
 public:
-    Server_Manager();
-    Server_Manager(int argc, char *argv[]);
-    Server_Manager(char * port);
-    Server_Manager(const Server_Manager& orig);
-    virtual ~Server_Manager();
+    ServerManager();
+    ServerManager(int argc, char *argv[]);
+    ServerManager(char * port);
+    virtual ~ServerManager();
+    static std::list<Cliente*> clients;
 
     void conectar();
 
@@ -48,7 +48,6 @@ private:
     int server;
     int port_number;
     char buffer[buf_size];
-    std::list<Cliente*>* clients;
     std::list<ClientHandler*>* clientsHandlerList;
    // std::list<std::thread>* threads_list;
 

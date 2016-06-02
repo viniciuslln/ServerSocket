@@ -11,12 +11,8 @@
  * Created on 21 de Maio de 2016, 21:40
  */
 
-#include "Server_Manager.hpp"
+#include "ServerManager.hpp"
 #include "ClientHandler.hpp"
-
-
-#define handle_error(msg) \
-           do { perror(msg); /*exit(EXIT_FAILURE);*/ } while (0)
 
 using namespace std;
 
@@ -26,50 +22,60 @@ void error(const char *msg)
     exit(1);
 }
 
-Server_Manager::Server_Manager()
+/**
+ * Construtor com porta padrão
+ */
+ServerManager::ServerManager()
 {
-    clients = new std::list<Cliente*>();
-    clientsHandlerList = new std::list<ClientHandler*>();
+    //clients = new std::list<Cliente*>();
+    clientsHandlerList = new std::list<ClientHandler*>();//armazena os ClientHandler da execução
 
     port_number = 6969;
 
+    
+    /*
+     *Declarando variaveis de endereço
+     */
     server_size = sizeof (server_addr);
-
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(port_number);
+    server_addr.sin_family = AF_INET; //IPv4
+    server_addr.sin_addr.s_addr = INADDR_ANY; //Ip da maquina
+    server_addr.sin_port = htons(port_number); 
 
 }
-
-Server_Manager::Server_Manager(char* port)
+/**
+ * COnstrutor com porta informada
+ * @param port numero da porta
+ */
+ServerManager::ServerManager(char* port)
 {
-    clients = new std::list<Cliente*>();
-    clientsHandlerList = new std::list<ClientHandler*>();
+    clientsHandlerList = new std::list<ClientHandler*>();//armazena os ClientHandler da execução
 
     port_number = atoi(port);
 
+    /*
+     *Declarando variaveis de endereço
+     */
     server_size = sizeof (server_addr);
-
     server_addr.sin_family = AF_INET;
     server_addr.sin_addr.s_addr = INADDR_ANY;
     server_addr.sin_port = htons(port_number);
 
 }
 
-Server_Manager::Server_Manager(const Server_Manager& orig)
+ServerManager::~ServerManager()
 {
 }
 
-Server_Manager::~Server_Manager()
+/**
+ * Realiza dota operação do servidor
+ */
+void ServerManager::conectar()
 {
-}
 
-void Server_Manager::conectar()
-{
-
-    //socke server
+    /**
+     * Declarando descritor de arquivo do servidor, cria socket e verificando erro
+     */
     int server = socket(AF_INET, SOCK_STREAM, 0); //IPPROTO_TCP);
-
     if ( server < 0 )
     {
         cout << "Erro ao estabelecer conexão" << endl;
@@ -78,10 +84,12 @@ void Server_Manager::conectar()
 
     cout << "Server socket criado" << endl;
 
-    //binding
+    /**
+     * Realisa o bind e verifica erros
+     */
     if ( bind(server, ( struct sockaddr* ) &server_addr, server_size) < 0 )
     {
-        handle_error("bind");
+        perror("bind");
         cout << "Erro bind socket" << endl;
         exit(1);
     }
@@ -90,38 +98,51 @@ void Server_Manager::conectar()
     cout << "Listen Clients, port number: " << port_number << endl;
 
 
-    //listen
+    /**
+     * Realisa o bind e verifica erros
+     */
     if ( listen(server, 0) == -1 )
-        handle_error("listen");
+        perror("listen");
 
 
     //ClientHandler* ch = new ClientHandler(clients);
 
-
+    /**
+     * aceita clientes continuamente
+     */
     while ( 1 )
     {
+        /*
+        *Declarando descritor de arquivo do cliente
+        * e suas variaveis de endereço
+        */
         int cli;
         struct sockaddr_in cli_addr;
         socklen_t cli_size = sizeof (struct sockaddr_in);
 
-        //accept client
+        /**
+         * Aguarda e aceita cliente
+         * verifica erros
+         */
         cli = accept(server, ( struct sockaddr * ) &cli_addr, &cli_size);
         if ( cli < 0 )
         {
-            handle_error("accept");
+            perror("accept");
             cout << "Erro ao aceitar" << endl;
             exit(1);
         }
 
+        /**
+         * Cria novo objeto Cliente
+         */
         Cliente *client = new Cliente(cli, cli_addr, cli_size, server_addr );
         
         cout << "Connected Client: " << client->getClient() << " IP: " << client->getClientIp() << endl;
         
+        /**
+         * começa operação
+         */
         clientsHandlerList->push_back(new ClientHandler(client) );
-        clients->push_back(client);
-        
-
-
 
     }
 

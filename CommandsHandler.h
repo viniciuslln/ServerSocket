@@ -21,6 +21,11 @@
 #include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+/**
+ * Classe que pocessa os comandos recebidos
+ * Mais informações no arquivo CommandsHandler.cpp
+ */
 class CommandsHandler {
 public:
     static Commands bufferToCommand(char ch[]);

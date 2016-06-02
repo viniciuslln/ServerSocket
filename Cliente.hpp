@@ -18,7 +18,9 @@
 #include <arpa/inet.h>
 #include <ctime>
 
-
+/**
+ * Classe que armazena dados do cliente
+ */
 class Cliente {
 private:
     int client;

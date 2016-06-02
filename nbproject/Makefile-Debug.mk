@@ -38,7 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/ClientHandler.o \
 	${OBJECTDIR}/Cliente.o \
 	${OBJECTDIR}/CommandsHandler.o \
-	${OBJECTDIR}/Server_Manager.o \
+	${OBJECTDIR}/ServerManager.o \
 	${OBJECTDIR}/main.o
 
 
@@ -81,10 +81,10 @@ ${OBJECTDIR}/CommandsHandler.o: CommandsHandler.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/CommandsHandler.o CommandsHandler.cpp
 
-${OBJECTDIR}/Server_Manager.o: Server_Manager.cpp 
+${OBJECTDIR}/ServerManager.o: ServerManager.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Server_Manager.o Server_Manager.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ServerManager.o ServerManager.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}

@@ -13,8 +13,19 @@
 
 #include "Cliente.hpp"
 
+/**
+ * Classe que armazena dados do cliente
+ */
 Cliente::Cliente() {
 }
+/**
+ * Construtor
+ * @param cli desclitor de arquivo socket
+ * variaveis de endereço de rede: 
+ * @param soc_add
+ * @param soc_len
+ * @param server_addr
+ */
 Cliente::Cliente(int cli, sockaddr_in soc_add, socklen_t soc_len, sockaddr_in server_addr) {
     this->client = cli;
     this->clientAddr = soc_add;
